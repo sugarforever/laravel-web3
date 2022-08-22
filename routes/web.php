@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatRoomController;
 use App\Models\CIDRecord;
 use App\Services\IPFSStorageService;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,7 @@ Route::get('/dashboard', function (IPFSStorageService $ipfsStorageService) {
 
     return view('dashboard')->with('stored_files', $stored_files);
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/chatroom', [ChatRoomController::class, 'show']);
 
 require __DIR__ . '/auth.php';
