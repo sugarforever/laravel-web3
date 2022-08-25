@@ -16,16 +16,18 @@ class MessagePushed implements ShouldBroadcast
 
     private $message;
     private $channel_id;
+    private $user_name;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($channel_id, $message)
+    public function __construct($channel_id, $message, $user_name)
     {
         $this->channel_id = $channel_id;
         $this->message = $message;
+        $this->user_name = $user_name;
     }
 
     /**
@@ -41,7 +43,8 @@ class MessagePushed implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'payload' => $this->message
+            'message' => $this->message,
+            'user' => $this->user_name
         ];
     }
 }

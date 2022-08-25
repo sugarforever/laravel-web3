@@ -35,6 +35,7 @@ Route::get('/dashboard', function (IPFSStorageService $ipfsStorageService) {
     return view('dashboard')->with('stored_files', $stored_files);
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/chatroom', [ChatRoomController::class, 'show']);
+Route::get('/chatroom', [ChatRoomController::class, 'show'])->middleware(['auth']);
+Route::post('/chatroom/send/{channel_id}', [ChatRoomController::class, 'sendMessage'])->middleware(['auth']);
 
 require __DIR__ . '/auth.php';
