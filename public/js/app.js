@@ -26672,15 +26672,25 @@ __webpack_require__.r(__webpack_exports__);
     var messages = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
     var messageInput = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)("");
     window.Echo.channel('102').listen('MessagePushed', function (e) {
-      messages.value.push(e);
+      var user = e.user;
+
+      if (user != LoginUser.name) {
+        messages.value.push(e);
+      }
     });
 
     function sendMessage() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/chatroom/send/102', {
-        message: messageInput.value
-      }).then(function () {
-        messageInput.value = "";
-      });
+      if (messageInput.value.length > 0) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post('/chatroom/send/102', {
+          message: messageInput.value
+        }).then(function () {
+          messages.value.push({
+            message: messageInput.value,
+            user: LoginUser.name
+          });
+          messageInput.value = "";
+        });
+      }
     }
 
     var __returned__ = {
@@ -26727,10 +26737,10 @@ var _hoisted_4 = {
   "class": "flex flex-1 flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 };
 var _hoisted_5 = {
-  "class": "flex items-end"
+  "class": "text-sm text-blue-600"
 };
 var _hoisted_6 = {
-  "class": "flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start"
+  "class": "space-y-2 text-xs max-w-xs order-2 items-start"
 };
 var _hoisted_7 = {
   "class": "px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600"
@@ -26787,11 +26797,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "chat-message",
       key: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(message.message), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(message.user), 1
     /* TEXT */
-    )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(message.user), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(message.message), 1
     /* TEXT */
-    )])]);
+    )])])])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {

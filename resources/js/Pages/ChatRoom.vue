@@ -7,15 +7,25 @@ const messages = ref([]);
 const messageInput = ref("");
 
 window.Echo.channel('102').listen('MessagePushed', e => {
-    messages.value.push(e)
+    const { user } = e;
+    if (user != LoginUser.name) {
+        messages.value.push(e)
+    }
 });
 
 function sendMessage() {
-    axios.post('/chatroom/send/102', {
-        message: messageInput.value
-    }).then(() => {
-        messageInput.value = "";
-    })
+    if (messageInput.value.length > 0) {
+        axios.post('/chatroom/send/102', {
+            message: messageInput.value
+        }).then(() => {
+            messages.value.push({
+                message: messageInput.value,
+                user: LoginUser.name
+            });
+
+            messageInput.value = "";
+        });
+    }
 }
 
 </script>
@@ -56,15 +66,16 @@ function sendMessage() {
             <div id="messages"
                 class="flex flex-1 flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
                 <div class="chat-message" v-for="(message, index) in messages" :key="index">
-                    <div class="flex items-end">
-                        <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+                    <div>
+                        <div class="text-sm text-blue-600">{{ message.user }}</div>
+                        <div class="space-y-2 text-xs max-w-xs order-2 items-start">
                             <div>
                                 <span
                                     class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
                                     {{ message.message }}
                                 </span>
                             </div>
-                        </div><span>{{ message.user }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,8 +88,7 @@ function sendMessage() {
                                     d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
                                 </path>
                             </svg></button></span>
-                    <input type="text" placeholder="Write your message!"
-                        v-model="messageInput"
+                    <input type="text" placeholder="Write your message!" v-model="messageInput"
                         class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3">
                     <div class="absolute right-0 items-center inset-y-0 hidden sm:flex">
                         <button type="button"
@@ -108,8 +118,7 @@ function sendMessage() {
                                 </path>
                             </svg>
                         </button>
-                        <button type="button"
-                            @click="sendMessage"
+                        <button type="button" @click="sendMessage"
                             class="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"><span
                                 class="font-bold">Send</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" class="h-6 w-6 ml-2 transform rotate-90">

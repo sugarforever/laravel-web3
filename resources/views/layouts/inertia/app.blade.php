@@ -9,5 +9,11 @@
   </head>
   <body>
     @inertia
+
+    <script>
+        window.LoginUser = {
+            name: {!! '"' . auth()->user()->name .'"' !!}
+        }
+    </script>
   </body>
 </html>
